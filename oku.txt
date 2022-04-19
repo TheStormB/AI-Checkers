@@ -1,0 +1,8 @@
+1. main.py fps ayarini silebilirsin
+2. bazi looplari degistirmeye calsiabilirsin
+3. isimleri degistirmeye calis
+4. debug metodunu kaldirabilirsin
+5. comment ekliyebiliriz farklilastirmak adina
+6. AI bolumunu baska bir sekilde birlestirmeye calisabiliriz
+7. belki bazi sayfalari birlestirebiliriz
+8. isimleri degistir "win"

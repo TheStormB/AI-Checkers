@@ -43,8 +43,8 @@ class Board():
         self.board[piece.row][piece.col], self.board[row][col] = self.board[row][col], self.board[piece.row][piece.col]
         piece.move(row, col)
 
-        if row == rows or row == 0:
-            piece.make_king()
+        if row == rows - 1 or row == 0:
+            piece.create_king()
             if piece.color == black:
                 self.black_king += 1
             else:
@@ -56,5 +56,99 @@ class Board():
     def get_moves(self, piece):
         moves = {}
         left = piece.col - 1
+        right = piece.col + 1
+        row = piece.row
+
+        if piece.color == white or piece.king:
+            moves.update(self._diagonal_left(row - 1, max(row - 3, -1), -1, piece.color, left))
+            moves.update(self._diagonal_right(row - 1, max(row - 3, -1), -1, piece.color, right))
+        if piece.color == black or piece.king:
+            moves.update(self._diagonal_left(row + 1, min(row + 3, rows), 1, piece.color, left))
+            moves.update(self._diagonal_right(row + 1, min(row + 3, rows), 1, piece.color, right))
+
+        return moves
+
+    def _diagonal_right(self, start, stop, step, color, right, skipped=[]):
+        moves = {}
+        last = []
+        for r in range(start, stop, step):
+            if right >= cols:
+                break
+
+            current = self.board[r][right]
+            if current == 0:
+                if skipped and not last:
+                    break
+                elif skipped:
+                    moves[(r, right)] = last + skipped
+                else:
+                    moves[(r, right)] = last
+
+                if last:
+                    if step == -1:
+                        row = max(r - 3, 0)
+                    else:
+                        row = min(r + 3, rows)
+
+                    moves.update(self._diagonal_left(r + step, row, step, color, right - 1, skipped=last))
+                    moves.update(self._diagonal_right(r + step, row, step, color, right + 1, skipped=last))
+                break
+            elif current.color == color:
+                break
+            else:
+                last = [current]
+
+            right += 1
+        return moves
+
+    def _diagonal_left(self, start, stop, step, color, left, skipped=[]):
+        moves = {}
+        last = []
+        for r in range(start, stop, step):
+            if left < 0:
+                break
+
+            current = self.board[r][left]
+            if current == 0:
+                if skipped and not last:
+                    break
+                elif skipped:
+                    moves[(r, left)] = last + skipped
+                else:
+                    moves[(r, left)] = last
+
+                if last:
+                    if step == -1:
+                        row = max(r - 3, 0)
+                    else:
+                        row = min(r + 3, rows)
+
+                    moves.update(self._diagonal_left(r + step, row, step, color, left - 1, skipped=last))
+                    moves.update(self._diagonal_right(r + step, row, step, color, left + 1, skipped=last))
+                break
+            elif current.color == color:
+                break
+            else:
+                last = [current]
+
+            left -= 1
+        return moves
+
+    def remove(self, pieces):
+        for piece in pieces:
+            self.board[piece.row][piece.col] = 0
+            if piece != 0:
+                if piece.color == white:
+                    self.white_left -= 1
+                else:
+                    self.black_left -= 1
+
+    def winner(self):
+        if self.black_left <= 0:
+            print("White wins")
+        elif self.white_left <= 0:
+            print("Black Wins")
+
+        return None
 
 

@@ -1,5 +1,5 @@
 import pygame
-from constants import width, height, square_size
+from constants import width, height, square_size, white
 from game import Game
 fps = 60
 display = pygame.display.set_mode((width, height))
@@ -22,6 +22,10 @@ def main():
     while run:
         clock.tick(fps)
 
+        if game.winner() != None:
+            print(game.winner())
+            run = False
+
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
@@ -30,6 +34,8 @@ def main():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
                 row, col = get_position(pos)
+                game.select(row, col)
+
 
         game.update()
 

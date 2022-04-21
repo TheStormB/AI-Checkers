@@ -1,9 +1,11 @@
 import pygame
 from constants import width, height, square_size, white
 from game import Game
+import algorithm
 fps = 60
 display = pygame.display.set_mode((width, height))
 pygame.display.set_caption('Checkers')
+
 
 
 def get_position(position):
@@ -22,7 +24,16 @@ def main():
     while run:
         clock.tick(fps)
 
-        if game.winner() != None:
+        if game.turn == white:
+            value, new_board = algorithm.min_max(game.get_board(), 4, white, game)
+            game.ai_move(new_board)
+
+        if game.turn == white:
+            value, new_board = algorithm.min_max(game.get_board(), 4, white, game)
+            game.ai_move(new_board)
+
+
+        if game.winner() is not None:
             print(game.winner())
             run = False
 

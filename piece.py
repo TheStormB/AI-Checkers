@@ -1,5 +1,5 @@
 import pygame
-from constants import black, grey, square_size
+from constants import black, grey, square_size, KING
 
 class Piece():
     padding = 15
@@ -14,15 +14,6 @@ class Piece():
         self.y = 0
         self.position()
 
-
-        # we don't need it because i am already using on the board
-        """
-        if self.color == black:
-            self.direction = -1
-        else:
-            self.direction = 1
-        """
-
     def position(self):
         self.x = square_size * self.col + square_size // 2
         self.y = square_size * self.row + square_size // 2
@@ -30,11 +21,12 @@ class Piece():
     def create_king(self):
         self.king = True
 
-    def draw(self, win):
+    def draw(self, display):
         radius = square_size//2 - self.padding
-        pygame.draw.circle(win, grey, (self.x, self.y), radius + self.border)
-        pygame.draw.circle(win, self.color, (self.x, self.y), radius)
-
+        pygame.draw.circle(display, grey, (self.x, self.y), radius + self.border)
+        pygame.draw.circle(display, self.color, (self.x, self.y), radius)
+        if self.king:
+            display.blit(KING, (self.x - KING.get_width() // 2, self.y - KING.get_height() // 2))
 
     def move(self, row, col):
         self.row = row

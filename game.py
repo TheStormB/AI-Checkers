@@ -66,3 +66,12 @@ class Game:
             self.turn = black
         else:
             self.turn = white
+
+
+    def get_board(self):
+        return self.board
+
+    def ai_move(self, board):
+        self.board = board
+        self.change_turn()
+

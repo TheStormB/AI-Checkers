@@ -148,7 +148,21 @@ class Board():
             print("White wins")
         elif self.white_left <= 0:
             print("Black Wins")
-
         return None
+
+
+    # evaluation for the AI
+    def evaluation(self):
+        return self.black_left - self.white_left + (self.black_king * 0.5 - self.white_king * 0.5)
+
+    # collecting same color pieces
+    def get_all_pieces(self, color):
+        pieces = []
+        for row in self.board:
+            for piece in row:
+                if piece != 0 and piece.color == color:
+                    pieces.append(piece)
+        return pieces
+
 
 
